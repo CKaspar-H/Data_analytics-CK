@@ -10,6 +10,7 @@ editor_options:
     wrap: 72
 ---
 
+
 ```{=html}
 <style type="text/css">
 
@@ -73,17 +74,12 @@ recommendations.
 
 #### Importing library
 
-```{r import Library}
-install.packages("tidyverse")
-install.packages("readr")
-install.packages("plyr")
-install.packages("purrr")
-library("purrr")
-library("tidyverse")
-library("ggplot2")
-library("dplyr")
-library("readr")
-library("plyr")
+```{r }
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(plyr)
 
 ```
 
@@ -98,18 +94,18 @@ The data is was made available by Motivate International Inc. under the
 #### Loading .csv file
 
 ```{r Importing all DataSets}
-##Jan2023 <- read_csv("202301-divvy-tripdata.csv")
-##Feb2023 <- read_csv("202302-divvy-tripdata.csv")
-##Mar2023 <- read_csv("202303-divvy-tripdata.csv")
-##Apr2023 <- read_csv("202304-divvy-tripdata.csv")
-##May2023 <- read_csv("202305-divvy-tripdata.csv")
-##Jun2023 <- read_csv("202306-divvy-tripdata.csv")
-##Jul2023 <- read_csv("202307-divvy-tripdata.csv")
-##Aug2023 <- read_csv("202308-divvy-tripdata.csv")
-##Sep2023 <- read_csv("202309-divvy-tripdata.csv")
-##Oct2023 <- read_csv("202310-divvy-tripdata.csv")
-##Nov2023 <- read_csv("202311-divvy-tripdata.csv")
-##Dec2023 <- read_csv("202312-divvy-tripdata.csv")
+Jan2023 <- read_csv("202301-divvy-tripdata.csv")
+Feb2023 <- read_csv("202302-divvy-tripdata.csv")
+Mar2023 <- read_csv("202303-divvy-tripdata.csv")
+Apr2023 <- read_csv("202304-divvy-tripdata.csv")
+May2023 <- read_csv("202305-divvy-tripdata.csv")
+Jun2023 <- read_csv("202306-divvy-tripdata.csv")
+Jul2023 <- read_csv("202307-divvy-tripdata.csv")
+Aug2023 <- read_csv("202308-divvy-tripdata.csv")
+Sep2023 <- read_csv("202309-divvy-tripdata.csv")
+Oct2023 <- read_csv("202310-divvy-tripdata.csv")
+Nov2023 <- read_csv("202311-divvy-tripdata.csv")
+Dec2023 <- read_csv("202312-divvy-tripdata.csv")
 ```
 
 #### ROCCC Data Check
@@ -124,8 +120,8 @@ data Check in mind.
 Sample Table
 
 ```{r Test Run of DataSet}
-## Jan2023 <- read_csv("202301-divvy-tripdata.csv")
-## head(Jan2023)
+Jan2023 <- read_csv("202301-divvy-tripdata.csv")
+head(Jan2023)
 ```
 
 ### Observations:
@@ -154,18 +150,18 @@ Margin of Error:
 ### Combining all the Data-sets together
 
 ```{r Creating dataset to contain all data}
-# setwd("E:/Data Analytics/Datasets/Cyclistics dataset")
+#setwd("E:/Data Analytics/Datasets/Cyclistics dataset")
 # getwd()
 # 
-# Data_2024 <- list.files(                 ## Creating a dataset to combine all .csv
-#   pattern = "*.csv",
-#   full.names = T) %>%
-#   lapply(read_csv) %>%
-#   bind_rows()
-# 
-# write.csv(Data_2024, "Data_2024.csv")    ## Exporting Data_2024 to save Environment 
-# 
-# head(Data_2024)                          ## Sample of Table
+ Data_2024 <- list.files(                 ## Creating a dataset to combine all .csv
+   pattern = "*.csv",
+   full.names = T) %>%
+  lapply(read_csv) %>%
+   bind_rows()
+ 
+ write.csv(Data_2024, "Data_2024.csv")    ## Exporting Data_2024 to save Environment 
+ 
+ head(Data_2024)                          ## Sample of Table
 ```
 
 ### Cleaning Data-set
