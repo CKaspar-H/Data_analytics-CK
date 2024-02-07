@@ -1,0 +1,219 @@
+---
+  title: "Bike-share Case Study"
+author: "Alexander McDaniel"
+date: "2024-01-31"
+output: html_document
+editor_options: 
+  markdown: 
+  wrap: 72
+---
+  
+  ```{=html}
+<style type="text/css">
+  
+  h1.title {
+    font-size: 38px;
+    color: Black;
+    text-align: center;
+  }
+h4.author { /* Header 4 - and the author and data headers use this too  */
+    font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: Dark Blue;
+  text-align: center;
+}
+h4.date { /* Header 4 - and the author and data headers use this too  */
+    font-size: 18px;
+  font-family: "Times New Roman", Times, serif;
+  color: Dark Blue;
+  text-align: center;
+}
+</style>
+  ```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Capstone Project
+
+### Background Scenario
+
+For this Data Analysis Project we will be working with a fictional
+company, "Cyclistic" a bike-sharing company. The scenario will have
+myself as a junior data analyst working with the company marketing
+analyst team to help understand the difference between the casual riders
+vs. the annual memberships.Gathering insights, I will design a new
+marketing strategy to convert casual riders to annual members. Using
+compelling data insight and professional data visualizations I will
+receive approval from the Cyclistic executives to act on my
+recommendations.
+
+### StackHolders
+
+-   Director of Marketing ("Lily Moreno")
+-   Cyclistic Executives Team
+-   Cyclistic Marketing analytics team
+
+## Ask
+
+### Business Objective
+
+#### Questions:
+
+1.  How do annual members and casual riders sue Cyclistic bikes
+differently, and is it quantifiable?
+  2.  What hypothesis can we generate that could be the reason for the
+differences
+3.  Is there executable measures the company can make to convert more
+casual riders to have a annual membership
+
+## Preparing the Data
+
+#### Importing library
+
+```{r }
+install.packages("tidyverse")
+install.packages("readr")
+install.packages("plyr")
+install.packages("purrr")
+library("purrr")
+library("tidyverse")
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(plyr)
+
+```
+
+### Importing Datasets
+
+The Cyclistic has has provided records of both casual and annual
+memberships trip datasets in from the year 2023. Due to the company
+providing the data, we can consider the data first party and credibly.
+The data is was made available by Motivate International Inc. under the
+[license](https://divvybikes.com/data-license-agreement).
+
+#### Loading .csv file
+```{r}
+##Jan2023 <- read_csv("202301-divvy-tripdata.csv")
+##Feb2023 <- read_csv("202302-divvy-tripdata.csv")
+##Mar2023 <- read_csv("202303-divvy-tripdata.csv")
+##Apr2023 <- read_csv("202304-divvy-tripdata.csv")
+##May2023 <- read_csv("202305-divvy-tripdata.csv")
+##Jun2023 <- read_csv("202306-divvy-tripdata.csv")
+##Jul2023 <- read_csv("202307-divvy-tripdata.csv")
+##Aug2023 <- read_csv("202308-divvy-tripdata.csv")
+##Sep2023 <- read_csv("202309-divvy-tripdata.csv")
+##Oct2023 <- read_csv("202310-divvy-tripdata.csv")
+##Nov2023 <- read_csv("202311-divvy-tripdata.csv")
+##Dec2023 <- read_csv("202312-divvy-tripdata.csv")
+```
+
+
+
+
+#### ROCCC Data Check
+Now that I received the data I need to check for any potential bias in the data provided. using the ROCCC Method(reliable, original, comprehensive, current and cited) I examine the datasets keeping the data Check in mind.
+
+## Processing the Data
+Sample Table
+```{r}
+## Jan2023 <- read_csv("202301-divvy-tripdata.csv")
+## head(Jan2023)
+```
+
+### Observations:
+From Looking over the data we can see that we have 13 columns(variables). analyzing the data we will find the data is complete, missing information can be seen in the data-set such at Starting_station_name, start_station_id, end_station_name, and end_station_id. Another issue that can be observed regarding the stations ID is that the format is not a universal format. When thinking to the Business objective we must solve, the follow data that is missing wont affect the analyzing process.
+
+### Calculating for Confidence level and Margin error:
+Calculated as Followed:
+  
+  Population size of Chicago: 8,927,000
+
+Sample size: 5,719,877
+
+Confidence level: 
+  
+  Margin of Error:
+  
+  
+  ### Combining all the Datasets together
+  ```{r}
+setwd("E:/Data Analytics/Datasets/Cyclistics dataset")
+getwd()
+
+Data_2024 <- list.files(                 ## Creating a dataset to combine all .csv
+  pattern = "*.csv",
+  full.names = T) %>%
+  lapply(read_csv) %>%
+  bind_rows()
+
+write.csv(Data_2024, "Data_2024.csv")    ## Exporting Data_2024 to save Environment space on Cloud
+
+head(Data_2024)                          ## Sample of Table
+```
+
+### Cleaning Dataset
+Thoughts: First thing that come to mind is I need to change the starting/end time to values that I can graph. Finding the difference between the start and end will give me the duration of the trip.I will also need to calculate the distance that was traveled for the trip, we do not have a tracker for distance so the distance between the start station and end station will be a sufficient alternative.Lastly, Finding the days of the week that the difference members chose to ride and the time will be important.
+
+Predicted Visualizations needed:
+  1. Graph of Starting / end stations
+2. Days of week cyclist ride.
+3. Times rider during the day
+4. Distances between the memberships they ride.
+
+First Lets create the new column needed to organize the data, The Create a new data with the new variables we will need.
+```{r}
+### Create a new data set, trim the variable that are not needed
+Day_of_Week <- Data_2024                                   # Replicate data of Data_2024
+Day_of_Week <- Day_of_Week[ , -c(1:3, 6:9)]               # Deleted the Variables not needed
+
+### Convert date's to days of the week.
+Day_of_Week$weekday <- weekdays(Day_of_Week$started_at)    # Convert Date to Days of the week
+head(Day_of_Week)
+
+### separate the times of day to separate column
+Day_of_week  <- separate(Day_of_Week,
+                         col = ended_at,
+                         into = c("ended_date", "ended_time"),
+                         sep = " ",
+                         remove = FALSE)
+
+Day_of_week  <- separate(Day_of_week,
+                         col = started_at,
+                         into = c("Start_date", "Start_time"),
+                         sep = " ",
+                         remove = FALSE)
+
+
+
+### Duration of each trip
+class(Day_of_week$started_at)
+
+
+
+# Day_of_week$ <- df %>%
+#   mutate(time_diff = as.character(hms::as_hms(
+#     difftime(
+#       time1 = ended_at,
+#       time2 = started_at,
+#       units = "mins"
+#     )
+#   )))
+# 
+# 
+# 
+# Day_of_week$Start_time <- hms(Day_of_week$Start_time)
+# Day_of_week$Start_time <- as.numeric(Day_of_week$Start_time)
+# 
+# Day_of_week$ended_time <- hms(Day_of_week$ended_time)
+# Day_of_week$ended_time <- as.numeric(Day_of_week$ended_time)
+
+
+```
+
+## Analyzing Data
+
+## Sharing the Data
+
+## Act
