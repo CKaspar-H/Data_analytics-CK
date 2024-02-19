@@ -94,6 +94,8 @@ The data is was made available by Motivate International Inc. under the
 #### Loading .csv file
 
 ```{r Importing all DataSets}
+setwd("E:/Data Analytics/Datasets/Cyclistics dataset/2023_Data")
+getwd()
 Jan2023 <- read_csv("202301-divvy-tripdata.csv")
 Feb2023 <- read_csv("202302-divvy-tripdata.csv")
 Mar2023 <- read_csv("202303-divvy-tripdata.csv")
@@ -120,6 +122,7 @@ data Check in mind.
 Sample Table
 
 ```{r Test Run of DataSet}
+setwd("E:/Data Analytics/Datasets/Cyclistics dataset/2023_Data")
 Jan2023 <- read_csv("202301-divvy-tripdata.csv")
 head(Jan2023)
 ```
@@ -150,8 +153,7 @@ Margin of Error:
 ### Combining all the Data-sets together
 
 ```{r Creating dataset to contain all data}
-#setwd("E:/Data Analytics/Datasets/Cyclistics dataset")
-# getwd()
+setwd("E:/Data Analytics/Datasets/Cyclistics dataset/2023_Data")
 # 
  Data_2024 <- list.files(                 ## Creating a dataset to combine all .csv
    pattern = "*.csv",
@@ -183,7 +185,7 @@ Predicted Visualizations needed:
 
 -   3\. Times rider during the day
 
--   4\. Distances between the memberships they ride.
+-   4\. Duration between the memberships they ride.
 
 First Lets create the new column needed to organize the data, The Create
 a new data with the new variables we will need.
@@ -198,11 +200,12 @@ Day_of_Week$weekday <- weekdays(Day_of_Week$started_at)    # Convert Date to Day
 head(Day_of_Week)
 ```
 
-```{Add durations varaibles}
+```{R}
+
 Day_of_Week$Duration <- difftime(Day_of_Week$ended_at,Day_of_Week$started_at, units = "mins")
 ```
 
-```{r Separate data from times}
+```{r }
 #  separate the times of day to separate column
 # Day_of_week  <- separate(Day_of_week,
 #          col = ended_at,
@@ -219,7 +222,7 @@ Day_of_Week$Duration <- difftime(Day_of_Week$ended_at,Day_of_Week$started_at, un
 
 ```
 
-```{R Removed Chuck code}
+```{r }
 ### Duration of each trip
 class(Day_of_week$started_at)
 
@@ -246,18 +249,29 @@ class(Day_of_week$started_at)
 
 ## Analyzing Data
 
-```{r starting hours of day}
-Day_of_Week %>%
-  mutate(hour = hour(started_at)) %>%
-  group_by(hour) %>%
-  tally() %>%
-  ggplot() +
-  geom_line(aes(x = hour, y = n)) +
-  scale_x_continuous(breaks = seq(0, 24, 4))
+Creating graphs for 4 visualizations
 
+```{r }
+#Graph of Starting / end stations
+
+
+#Days of week cyclist ride.
+df_weekday <- ggplot(data = Day_of_Week, aes(x=weekday))
+df_weekday + geom_bar(stat = "count")
+
+
+#Times rider during the day
+
+#Duration between the memberships they ride.
+
+
+#Number of rider
+df_weekday <- ggplot(data = Day_of_Week, aes(x=member_casual))
+df_weekday + geom_bar(stat = "count")
 
 ```
 
 ## Sharing the Data
+
 
 ## Act
